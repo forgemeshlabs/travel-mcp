@@ -37,10 +37,13 @@
     "booking-partners",
     "forgemesh"
   ],
-  "homepage": "https://travel.forgemesh.io",
+  "homepage": "https://github.com/forgemeshlabs/travel-mcp#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/forgemeshlabs/travel-mcp"
+    "url": "git+https://github.com/forgemeshlabs/travel-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/forgemeshlabs/travel-mcp/issues"
   },
   "author": "Forgemesh",
   "license": "MIT",
