@@ -13,8 +13,7 @@ Public MCP server for travel search workflows. It gives agents a small set of to
 ## Install
 
 ```bash
-pnpm install
-pnpm build
+npm install -g @forgemeshlabs/travel-assistant-mcp
 ```
 
 ## Run
