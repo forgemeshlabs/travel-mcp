@@ -1,5 +1,5 @@
 {
-  "name": "travel-assistant-mcp",
+  "name": "@forgemeshlabs/travel-assistant-mcp",
   "version": "0.1.1",
   "description": "Public MCP server for travel search workflows, airport lookup, route comparison, and external booking links.",
   "type": "module",
