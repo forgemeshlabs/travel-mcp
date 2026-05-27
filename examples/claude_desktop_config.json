@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "travel-assistant": {
+      "command": "travel-assistant-mcp"
+    }
+  }
+}

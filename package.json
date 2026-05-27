@@ -1,0 +1,50 @@
+{
+  "name": "travel-assistant-mcp",
+  "version": "0.1.0",
+  "description": "Public MCP server for travel search workflows, airport lookup, route comparison, and external booking links.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "travel-assistant-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "examples"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "travel",
+    "flights",
+    "travel-search",
+    "travel-planning",
+    "booking-partners",
+    "forgemesh"
+  ],
+  "homepage": "https://travel.forgemesh.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/forgemeshlabs/travel"
+  },
+  "author": "Forgemesh",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
