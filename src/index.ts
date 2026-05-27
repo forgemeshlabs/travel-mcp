@@ -24,7 +24,7 @@ function textResponse(payload: unknown, isError = false) {
 }
 
 const server = new Server(
-  { name: "travel-assistant-mcp", version: "0.1.0" },
+  { name: "travel-assistant-mcp", version: "0.1.1" },
   { capabilities: { tools: {} } },
 );
 
