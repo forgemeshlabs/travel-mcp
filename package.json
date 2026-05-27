@@ -1,6 +1,6 @@
 {
   "name": "travel-assistant-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Public MCP server for travel search workflows, airport lookup, route comparison, and external booking links.",
   "type": "module",
   "main": "dist/index.js",
