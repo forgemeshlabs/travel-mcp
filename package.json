@@ -40,7 +40,7 @@
   "homepage": "https://travel.forgemesh.io",
   "repository": {
     "type": "git",
-    "url": "https://github.com/forgemeshlabs/travel"
+    "url": "https://github.com/forgemeshlabs/travel-mcp"
   },
   "author": "Forgemesh",
   "license": "MIT",
