@@ -33,43 +33,44 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "search_travel_options",
       description:
-        "Prepare a travel search workflow for two airports. Returns generic provider guidance and external booking links.",
+        "Search for travel options between two airports. Returns route metadata, trip type classification, and external booking links. Use this as the primary entry point when a user wants to find flights or plan a trip. Read-only, no authentication required, no rate limits. Responses may include commission-eligible booking partner links (disclosed in output).",
       inputSchema: {
         type: "object",
         properties: {
-          origin: { type: "string", description: "Origin airport IATA code" },
-          destination: { type: "string", description: "Destination airport IATA code" },
-          departure_date: { type: "string", description: "Departure date YYYY-MM-DD" },
-          return_date: { type: "string", description: "Return date YYYY-MM-DD" },
-          currency: { type: "string", description: "Currency code" },
+          origin: { type: "string", description: "Origin airport IATA code (e.g. 'LAX', 'JFK'). Case-insensitive." },
+          destination: { type: "string", description: "Destination airport IATA code (e.g. 'LHR', 'NRT'). Case-insensitive." },
+          departure_date: { type: "string", description: "Departure date in YYYY-MM-DD format. Optional — omit for flexible date searches." },
+          return_date: { type: "string", description: "Return date in YYYY-MM-DD format. Omit for one-way trips." },
+          currency: { type: "string", description: "ISO 4217 currency code (default: USD). Used in booking link parameters." },
         },
         required: ["origin", "destination"],
       },
     },
     {
       name: "get_airport_info",
-      description: "Get basic metadata for an airport by IATA code.",
+      description: "Look up metadata for a single airport by IATA code. Returns airport name, city, country, and timezone. Use this when you need to validate an airport code, resolve an airport name, or check timezone/country before comparing routes. Read-only, no authentication required, no rate limits. Use compare_routes instead when evaluating multiple origin-destination pairs.",
       inputSchema: {
         type: "object",
         properties: {
-          code: { type: "string", description: "IATA airport code" },
+          code: { type: "string", description: "Three-letter IATA airport code (e.g. 'SFO'). Case-insensitive." },
         },
         required: ["code"],
       },
     },
     {
       name: "compare_routes",
-      description: "Compare several airport pairs using generic route metadata.",
+      description: "Compare multiple origin-destination airport pairs side by side. Returns route type (domestic/international) and booking links for each pair. Use this when a user is deciding between alternative routes or airports — e.g. 'Should I fly LAX-LHR or SFO-LHR?'. Read-only, no authentication required, no rate limits. Use search_travel_options instead for a single route with dates. Responses may include commission-eligible booking partner links (disclosed in output).",
       inputSchema: {
         type: "object",
         properties: {
           routes: {
             type: "array",
+            description: "Array of route pairs to compare. Minimum 1, typically 2-5.",
             items: {
               type: "object",
               properties: {
-                origin: { type: "string" },
-                destination: { type: "string" },
+                origin: { type: "string", description: "Origin IATA code" },
+                destination: { type: "string", description: "Destination IATA code" },
               },
               required: ["origin", "destination"],
             },
@@ -80,27 +81,27 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "build_booking_link",
-      description: "Build an external booking link for a route.",
+      description: "Generate an external booking partner URL for a specific route and dates. Use this when you already have route details and need a clickable booking link — e.g. after comparing routes or confirming a travel plan. Read-only, no authentication required, no rate limits. The returned link may be commission-eligible (disclosed in output). Use search_travel_options instead if you need full search results, not just a link.",
       inputSchema: {
         type: "object",
         properties: {
-          origin: { type: "string", description: "Origin airport code" },
-          destination: { type: "string", description: "Destination airport code" },
-          departure_date: { type: "string", description: "Departure date YYYY-MM-DD" },
-          return_date: { type: "string", description: "Return date YYYY-MM-DD" },
-          currency: { type: "string", description: "Currency code" },
+          origin: { type: "string", description: "Origin IATA code (e.g. 'IAH'). Case-insensitive." },
+          destination: { type: "string", description: "Destination IATA code (e.g. 'CDG'). Case-insensitive." },
+          departure_date: { type: "string", description: "Departure date in YYYY-MM-DD format. Optional." },
+          return_date: { type: "string", description: "Return date in YYYY-MM-DD format. Optional — omit for one-way." },
+          currency: { type: "string", description: "ISO 4217 currency code (default: USD)." },
         },
         required: [],
       },
     },
     {
       name: "explain_travel_timing",
-      description: "Return general timing guidance for domestic or international routes.",
+      description: "Get general timing and logistics guidance for domestic or international travel. Returns advice on booking windows, check-in timing, layover planning, and seasonal considerations. Use this when a user asks 'when should I book?' or 'how early should I arrive?'. Read-only, no authentication required, no rate limits. Use search_travel_options instead if the user wants to search for specific flights.",
       inputSchema: {
         type: "object",
         properties: {
-          origin: { type: "string", description: "Origin airport code" },
-          destination: { type: "string", description: "Destination airport code" },
+          origin: { type: "string", description: "Origin IATA code. Optional — used to determine if route is international." },
+          destination: { type: "string", description: "Destination IATA code. Optional — used to determine if route is international." },
         },
         required: [],
       },
