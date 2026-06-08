@@ -24,7 +24,7 @@ function textResponse(payload: unknown, isError = false) {
 }
 
 const server = new Server(
-  { name: "travel-assistant-mcp", version: "0.1.1" },
+  { name: "travel-assistant-mcp", version: "0.1.2" },
   { capabilities: { tools: {} } },
 );
 
@@ -39,7 +39,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
         properties: {
           origin: { type: "string", description: "Origin airport IATA code (e.g. 'LAX', 'JFK'). Case-insensitive." },
           destination: { type: "string", description: "Destination airport IATA code (e.g. 'LHR', 'NRT'). Case-insensitive." },
-          departure_date: { type: "string", description: "Departure date in YYYY-MM-DD format. Optional — omit for flexible date searches." },
+          departure_date: { type: "string", description: "Departure date in YYYY-MM-DD format. Optional — omit for open date searches." },
           return_date: { type: "string", description: "Return date in YYYY-MM-DD format. Omit for one-way trips." },
           currency: { type: "string", description: "ISO 4217 currency code (default: USD). Used in booking link parameters." },
         },
@@ -224,4 +224,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 const transport = new StdioServerTransport();
+const stdinLifetime = setInterval(() => undefined, 2_147_483_647);
+process.once("SIGINT", () => clearInterval(stdinLifetime));
+process.once("SIGTERM", () => clearInterval(stdinLifetime));
+process.stdin.resume();
 void server.connect(transport);
