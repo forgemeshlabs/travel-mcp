@@ -16,6 +16,20 @@ const RESPONSE_BASE = {
   booking_language: "booking partners",
 } as const;
 
+const READ_ONLY_LOCAL_TOOL = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: false,
+} as const;
+
+const READ_ONLY_EXTERNAL_LINK_TOOL = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: true,
+} as const;
+
 function textResponse(payload: unknown, isError = false) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(payload) }],
@@ -33,7 +47,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "search_travel_options",
       description:
-        "Search for travel options between two airports. Returns route metadata, trip type classification, and external booking links. Use this as the primary entry point when a user wants to find flights or plan a trip. Read-only, no authentication required, no rate limits. Responses may include commission-eligible booking partner links (disclosed in output).",
+        "Primary travel search workflow for one origin-destination airport pair. Use when the user wants flight/trip options for a specific route; use compare_routes for multiple routes, build_booking_link only when route details are already known, and get_airport_info only to validate one airport. Read-only, no authentication, no booking side effects. return_date is optional; omit it for one-way trips. Responses include route metadata and may include commission-eligible external booking links.",
+      annotations: READ_ONLY_EXTERNAL_LINK_TOOL,
       inputSchema: {
         type: "object",
         properties: {
@@ -48,7 +63,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "get_airport_info",
-      description: "Look up metadata for a single airport by IATA code. Returns airport name, city, country, and timezone. Use this when you need to validate an airport code, resolve an airport name, or check timezone/country before comparing routes. Read-only, no authentication required, no rate limits. Use compare_routes instead when evaluating multiple origin-destination pairs.",
+      description: "Look up metadata for one airport by IATA code. Use to validate or explain a single airport code before route planning; use search_travel_options for an actual trip search and compare_routes for multiple origin-destination pairs. Read-only, no authentication, no external booking links, and no booking side effects.",
+      annotations: READ_ONLY_LOCAL_TOOL,
       inputSchema: {
         type: "object",
         properties: {
@@ -59,7 +75,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "compare_routes",
-      description: "Compare multiple origin-destination airport pairs side by side. Returns route type (domestic/international) and booking links for each pair. Use this when a user is deciding between alternative routes or airports — e.g. 'Should I fly LAX-LHR or SFO-LHR?'. Read-only, no authentication required, no rate limits. Use search_travel_options instead for a single route with dates. Responses may include commission-eligible booking partner links (disclosed in output).",
+      description: "Compare two or more airport route pairs side by side. Use when the user is choosing between alternate origins, destinations, or airports; use search_travel_options for one dated route and get_airport_info for a single airport lookup. Read-only, no authentication, no booking side effects. Responses may include commission-eligible external booking links for each route.",
+      annotations: READ_ONLY_EXTERNAL_LINK_TOOL,
       inputSchema: {
         type: "object",
         properties: {
@@ -81,7 +98,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "build_booking_link",
-      description: "Generate an external booking partner URL for a specific route and dates. Use this when you already have route details and need a clickable booking link — e.g. after comparing routes or confirming a travel plan. Read-only, no authentication required, no rate limits. The returned link may be commission-eligible (disclosed in output). Use search_travel_options instead if you need full search results, not just a link.",
+      description: "Generate only an external booking link for an already chosen route. Use after route details are known or after compare_routes/search_travel_options; do not use as the first step when the user still needs search guidance. Read-only, no authentication, no booking completion, and no reservation side effects. The returned link may be commission-eligible and is disclosed in output.",
+      annotations: READ_ONLY_EXTERNAL_LINK_TOOL,
       inputSchema: {
         type: "object",
         properties: {
@@ -96,7 +114,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     },
     {
       name: "explain_travel_timing",
-      description: "Get general timing and logistics guidance for domestic or international travel. Returns advice on booking windows, check-in timing, layover planning, and seasonal considerations. Use this when a user asks 'when should I book?' or 'how early should I arrive?'. Read-only, no authentication required, no rate limits. Use search_travel_options instead if the user wants to search for specific flights.",
+      description: "Explain general travel timing and logistics, including booking windows, airport arrival timing, layovers, and seasonal considerations. Use for advice questions like when to book or how early to arrive; use search_travel_options when the user wants route-specific flight search. Read-only, no authentication, no external booking link, and no booking side effects.",
+      annotations: READ_ONLY_LOCAL_TOOL,
       inputSchema: {
         type: "object",
         properties: {
