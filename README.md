@@ -1,14 +1,15 @@
 # Travel Assistant MCP
 
-Public MCP server for travel search workflows. It gives agents a small set of tools for airport lookup, route comparison, travel timing guidance, and external booking links.
+No-key travel assistant for Claude Desktop, Codex-style agent workflows, Hermes, and other MCP clients. It helps agents look up airports, compare routes, explain travel timing, and build external booking links without requiring a travel API account.
 
 ## Features
 
-- Search workflow responses using generic travel search providers
-- Airport metadata lookup by IATA code
-- Basic route comparison for provider integrations
-- External booking links for booking partners
-- Commission-eligible links disclosed in tool output
+- Look up airport metadata by IATA code
+- Compare alternate origin and destination airport routes
+- Explain booking windows, airport arrival timing, layovers, and seasonal travel factors
+- Build external booking links for selected routes
+- Run locally with no API key or account setup
+- Disclose commission-eligible links in tool output
 
 ## Install
 
@@ -16,22 +17,34 @@ Public MCP server for travel search workflows. It gives agents a small set of to
 npm install -g @forgemeshlabs/travel-assistant-mcp
 ```
 
-## Run
+## Claude Desktop
 
-```bash
-pnpm start
-```
-
-## MCP Client Example
+Add this to your Claude Desktop `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "travel-assistant": {
-      "command": "travel-assistant-mcp"
+      "command": "npx",
+      "args": ["-y", "@forgemeshlabs/travel-assistant-mcp"]
     }
   }
 }
+```
+
+Restart Claude Desktop after saving the config, then ask Claude to plan or compare travel routes.
+
+Codex, Hermes, and other MCP-capable agent runtimes can use the same server command:
+
+```bash
+npx -y @forgemeshlabs/travel-assistant-mcp
+```
+
+## Local Run
+
+```bash
+npm run build
+node dist/index.js
 ```
 
 ## Tools

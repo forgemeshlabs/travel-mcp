@@ -1,7 +1,11 @@
 {
   "mcpServers": {
     "travel-assistant": {
-      "command": "travel-assistant-mcp"
+      "command": "npx",
+      "args": [
+        "-y",
+        "@forgemeshlabs/travel-assistant-mcp"
+      ]
     }
   }
 }
