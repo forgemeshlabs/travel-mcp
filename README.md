@@ -1,3 +1,6 @@
+DO NOT USE THIS REPO!
+READ TRAVEL-REPO-MAP.md ASAP
+
 # Travel Assistant MCP
 
 No-key travel assistant for Claude Desktop, Codex-style agent workflows, Hermes, and other MCP clients. It helps agents look up airports, compare routes, explain travel timing, and build external booking links without requiring a travel API account.
