@@ -1,6 +1,6 @@
 {
   "name": "@forgemeshlabs/travel-assistant-mcp",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "No-key travel MCP for Claude Desktop, Codex-style agents, Hermes, and other clients.",
   "type": "module",
   "main": "dist/index.js",
@@ -20,12 +20,12 @@
     "examples"
   ],
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.30.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.0"
+    "vitest": "^4.1.10"
   },
   "keywords": [
     "mcp",
@@ -48,6 +48,6 @@
   "author": "Forgemesh",
   "license": "MIT",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }
