@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from "node:fs";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -8,6 +9,8 @@ import {
 import { getAirport } from "./airports.js";
 import { buildExternalBookingLink } from "./links.js";
 import { getTravelTimingAdvice, isInternationalRoute } from "./timing.js";
+
+const { version } = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { version: string };
 
 const RESPONSE_BASE = {
   source: "travel-assistant-mcp",
@@ -38,7 +41,7 @@ function textResponse(payload: unknown, isError = false) {
 }
 
 const server = new Server(
-  { name: "travel-assistant-mcp", version: "0.1.2" },
+  { name: "travel-assistant-mcp", version },
   { capabilities: { tools: {} } },
 );
 
