@@ -50,5 +50,8 @@
   "engines": {
     "node": ">=20"
   },
-  "mcpName": "io.github.forgemeshlabs/travel-assistant-mcp"
+  "mcpName": "io.github.forgemeshlabs/travel-assistant-mcp",
+  "overrides": {
+    "zod": "^4.6.6"
+  }
 }
